@@ -64,13 +64,13 @@ def mergeSort(arr, l, r):
     merge(arr, l, m, r)
 
 if __name__ == "__main__":
-  provider = TracerProvider()
-  processor = BatchSpanProcessor(ConsoleSpanExporter())
-  provider.add_span_processor(processor)
-  trace.set_tracer_provider(provider)
+  trace.set_tracer_provider(
+    TracerProvider(
+      resource=Resource.create({
+        SERVICE_NAME: "myPythonSvc"
+      })
 
   tracer = trace.get_tracer(__name__)
-
   with tracer.start_as_current_span("foo"):
     with tracer.start_as_current_span("bar"):
       with tracer.start_as_current_span("baz"):
