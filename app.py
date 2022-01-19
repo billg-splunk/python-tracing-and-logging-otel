@@ -1,3 +1,5 @@
+import time
+
 def merge(arr, l, m, r):
   n1 = m - l + 1
   n2 = r - m
@@ -68,5 +70,9 @@ if __name__ == "__main__":
   for i in range(n):
     print("%d" % arr[i], end=" ")
 
+  # Need to sleep a bit to ensure all traces are sent
+  time.sleep(10)
+
 # This code is contributed by Mohit Kumra
 # to geeksforgeeks.org
+# Modified by BG
