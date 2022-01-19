@@ -10,12 +10,11 @@ cd python-tracing-and-logging-otel
 ## Run (first time)
 
 ```
-./setup.sh
-splunk-py-trace python3 app.py
+# Pass in token (-t) and realm (-r)
+./run_first_time.sh -t XXX -r XXX
 ```
 
 ## Run (subsequent times)
 ```
-./activate.sh
-splunk-py-trace python3 app.py
+./run_subsequent_times.sh
 ```
