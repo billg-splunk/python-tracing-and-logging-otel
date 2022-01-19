@@ -1,10 +1,5 @@
 import time
 from opentelemetry import trace
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import (
-    BatchSpanProcessor,
-    ConsoleSpanExporter,
-)
 
 def merge(arr, l, m, r):
   n1 = m - l + 1
@@ -64,11 +59,6 @@ def mergeSort(arr, l, r):
     merge(arr, l, m, r)
 
 if __name__ == "__main__":
-  trace.set_tracer_provider(
-    TracerProvider(
-      resource=Resource.create({
-        SERVICE_NAME: "myPythonSvc"
-      })
 
   tracer = trace.get_tracer(__name__)
   with tracer.start_as_current_span("foo"):
