@@ -10,11 +10,14 @@ cd python-tracing-and-logging-otel
 ## Run (first time)
 
 ```
+cd python-tracing-and-logging-otel
 # Pass in token (-t) and realm (-r)
-./run_first_time.sh -t XXX -r XXX
+./setup.sh -t XXX -r XXX
 ```
+* Then exit and re-enter shell
 
 ## Run (subsequent times)
 ```
-./run_subsequent_times.sh
+cd python-tracing-and-logging-otel
+./run.sh
 ```
