@@ -1,6 +1,6 @@
 #!/bin/bash
 
-while getopts u:a:f: flag
+while getopts t:r: flag
 do
     case "${flag}" in
         t) token=${OPTARG};;
