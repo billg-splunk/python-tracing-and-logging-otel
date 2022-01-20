@@ -1,5 +1,6 @@
 import time
 import logging
+import syslog
 from opentelemetry import trace
 
 def merge(arr, l, m, r):
@@ -60,7 +61,6 @@ def mergeSort(arr, l, r):
     merge(arr, l, m, r)
 
 if __name__ == "__main__":
-  logging.basicConfig(filename='mylog.log', encoding='utf-8'
   tracer = trace.get_tracer(__name__)
   with tracer.start_as_current_span("foo"):
     logging.info('Foo')
@@ -69,6 +69,13 @@ if __name__ == "__main__":
       with tracer.start_as_current_span("baz"):
         logging.error('baz')
         print("Hello world from OpenTelemetry Python!")
+
+  with tracer.start_as_current_span("fi"):
+    syslog.syslog('fi')
+    with tracer.start_as_current_span("fie"):
+      syslog.syslog('fie')
+      with tracer.start_as_current_span("fofum"):
+        syslog.syslog('fofum')
 
   # Driver code to test above
   arr = [12, 11, 13, 5, 6, 7]
