@@ -62,6 +62,7 @@ def mergeSort(arr, l, r):
     mergeSort(arr, m+1, r)
     merge(arr, l, m, r)
 
+# Example 1: Default logging (which goes to sysout but applies the pattern correctly)
 if __name__ == "__main__":
   tracer = trace.get_tracer(__name__)
   with tracer.start_as_current_span("foo"):
@@ -72,6 +73,8 @@ if __name__ == "__main__":
         logging.error('baz')
         print("Hello world from OpenTelemetry Python!")
 
+  # Example 2: Logs to syslog, which is automatically ingested into Log Observer
+  #            (syslog natively supported)
   with tracer.start_as_current_span("fi"):
     syslog.syslog('fi')
     with tracer.start_as_current_span("fie"):
@@ -79,6 +82,8 @@ if __name__ == "__main__":
       with tracer.start_as_current_span("fofum"):
         syslog.syslog('fofum')
 
+  # Example 3: Applies a handler to send to syslog; in this case the formatter from 
+  #            the environment variable isn't used and this needs to be applied manually
   handler = logging.handlers.SysLogHandler(address='/dev/log')
   formatter = logging.Formatter('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] [trace_id=%(otelTraceID)s span_id=%(otelSpanID)s resource.service.name=%(otelServiceName)s] - %(message)s')
   handler.setFormatter(formatter)
