@@ -80,6 +80,8 @@ if __name__ == "__main__":
         syslog.syslog('fofum')
 
   handler = logging.handlers.SysLogHandler(address='/dev/log')
+  formatter = logging.Formatter('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] [trace_id=%(otelTraceID)s span_id=%(otelSpanID)s resource.service.name=%(otelServiceName)s] - %(message)s')
+  handler.setFormatter(formatter)
   myLogger = logging.getLogger('MyLogger')
   myLogger.addHandler(handler)
   with tracer.start_as_current_span("one"):
