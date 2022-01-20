@@ -60,7 +60,7 @@ def mergeSort(arr, l, r):
     merge(arr, l, m, r)
 
 if __name__ == "__main__":
-
+  logging.basicConfig(filename='mylog.log', encoding='utf-8'
   tracer = trace.get_tracer(__name__)
   with tracer.start_as_current_span("foo"):
     logging.info('Foo')
