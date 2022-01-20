@@ -77,14 +77,6 @@ if __name__ == "__main__":
       with tracer.start_as_current_span("fofum"):
         syslog.syslog('fofum')
 
-  syslog.openlog('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] [trace_id=%(otelTraceID)s span_id=%(otelSpanID)s resource.service.name=%(otelServiceName)s] - ')
-  with tracer.start_as_current_span("one"):
-    syslog.syslog('one')
-    with tracer.start_as_current_span("two"):
-      syslog.syslog('two')
-      with tracer.start_as_current_span("three"):
-        syslog.syslog('three')
-
   # Driver code to test above
   arr = [12, 11, 13, 5, 6, 7]
   n = len(arr)
