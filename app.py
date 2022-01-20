@@ -1,4 +1,5 @@
 import time
+import logging
 from opentelemetry import trace
 
 def merge(arr, l, m, r):
@@ -62,8 +63,11 @@ if __name__ == "__main__":
 
   tracer = trace.get_tracer(__name__)
   with tracer.start_as_current_span("foo"):
+    logging.info('Foo')
     with tracer.start_as_current_span("bar"):
+      logging.info('bar')
       with tracer.start_as_current_span("baz"):
+        logging.error('baz')
         print("Hello world from OpenTelemetry Python!")
 
   # Driver code to test above
