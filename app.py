@@ -1,6 +1,8 @@
 import time
 import logging
+import logging.handlers
 import syslog
+
 from opentelemetry import trace
 
 def merge(arr, l, m, r):
@@ -76,6 +78,16 @@ if __name__ == "__main__":
       syslog.syslog('fie')
       with tracer.start_as_current_span("fofum"):
         syslog.syslog('fofum')
+
+  handler = logging.handlers.SysLogHandler(address='/dev/log')
+  myLogger = logging.getLogger('MyLogger')
+  myLogger.addHandler(handler)
+  with tracer.start_as_current_span("one"):
+    myLogger.info('one')
+    with tracer.start_as_current_span("two"):
+      myLogger.info('two')
+      with tracer.start_as_current_span("three"):
+        myLogger.info('three')
 
   # Driver code to test above
   arr = [12, 11, 13, 5, 6, 7]
