@@ -28,8 +28,8 @@ if __name__ == "__main__":
   # Example 3: Applies a handler to send to syslog; in this case the formatter from 
   #            the environment variable isn't used and this needs to be applied manually
   handler = logging.handlers.SysLogHandler(address='/dev/log')
-  formatter = logging.Formatter('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] [trace_id=%(otelTraceID)s span_id=%(otelSpanID)s resource.service.name=%(otelServiceName)s] - %(message)s')
-  handler.setFormatter(formatter)
+  #formatter = logging.Formatter('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] [trace_id=%(otelTraceID)s span_id=%(otelSpanID)s resource.service.name=%(otelServiceName)s] - %(message)s')
+  #handler.setFormatter(formatter)
   myLogger = logging.getLogger('MyLogger')
   myLogger.addHandler(handler)
   with tracer.start_as_current_span("one"):
@@ -39,5 +39,5 @@ if __name__ == "__main__":
       with tracer.start_as_current_span("three"):
         myLogger.info('three')
 
-  # Need to sleep a bit to ensure all traces are sent
-  time.sleep(10)
+  # Need to ensure all traces are sent
+  trace.get_tracer_provider().shutdown()
