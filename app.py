@@ -38,8 +38,9 @@ if __name__ == "__main__":
       with tracer.start_as_current_span("three"):
         myLogger.info('three')
 
-# Example 4: Applies a handler to send to syslog; in this case the formatter 
-#            is applied manually
+  # Example 4: Applies a handler to send to syslog; in this case the formatter 
+  #            is applied manually. This is the only one I get trace correlation working
+  #            (although interestingly I see duplicate logs)
   handler = logging.handlers.SysLogHandler(address='/dev/log')
   formatter = logging.Formatter('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] [trace_id=%(otelTraceID)s span_id=%(otelSpanID)s resource.service.name=%(otelServiceName)s] - %(message)s')
   handler.setFormatter(formatter)
