@@ -15,5 +15,3 @@ sudo sh /tmp/splunk-otel-collector.sh --realm $realm -- $token --mode agent
 sudo apt install -y python3-pip
 # Install Otel Python libraries
 pip3 install splunk-opentelemetry[all]
-# Bootstrap
-splunk-py-trace-bootstrap

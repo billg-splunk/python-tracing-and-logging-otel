@@ -15,6 +15,7 @@ cd python-tracing-and-logging-otel
 ./setup.sh -t XXX -r XXX
 ```
 * Then exit and re-enter shell
+* ./bootstrap.sh
 
 ## Run (subsequent times)
 ```
