@@ -6,7 +6,7 @@ import syslog
 from opentelemetry import trace
 
 if __name__ == "__main__":
-  # Example 1: Default logging (which goes to sysout but applies the pattern correctly)
+  # Example 1: Default logging (which goes to sysout, not log observer, but applies the pattern correctly)
   tracer = trace.get_tracer(__name__)
   with tracer.start_as_current_span("foo"):
     logging.info('Foo')
@@ -17,7 +17,8 @@ if __name__ == "__main__":
         print("Hello world from OpenTelemetry Python!")
 
   # Example 2: Logs to syslog, which is automatically ingested into Log Observer
-  #            (syslog natively supported)
+  #            (syslog natively supported). These show up in log observer witout
+  #            the pattern applied and don't do trace correlation.
   with tracer.start_as_current_span("fi"):
     syslog.syslog('fi')
     with tracer.start_as_current_span("fie"):
@@ -25,11 +26,9 @@ if __name__ == "__main__":
       with tracer.start_as_current_span("fofum"):
         syslog.syslog('fofum')
 
-  # Example 3: Applies a handler to send to syslog; in this case the formatter from 
-  #            the environment variable isn't used and this needs to be applied manually
+  # Example 3: Applies a handler to send to syslog; in this case the formatter is used
+  #            but seems slightly off (date is cut off) and I don't see any trace correlation 
   handler = logging.handlers.SysLogHandler(address='/dev/log')
-  #formatter = logging.Formatter('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] [trace_id=%(otelTraceID)s span_id=%(otelSpanID)s resource.service.name=%(otelServiceName)s] - %(message)s')
-  #handler.setFormatter(formatter)
   myLogger = logging.getLogger('MyLogger')
   myLogger.addHandler(handler)
   with tracer.start_as_current_span("one"):
@@ -38,6 +37,21 @@ if __name__ == "__main__":
       myLogger.info('two')
       with tracer.start_as_current_span("three"):
         myLogger.info('three')
+
+# Example 4: Applies a handler to send to syslog; in this case the formatter 
+#            is applied manually
+  handler = logging.handlers.SysLogHandler(address='/dev/log')
+  formatter = logging.Formatter('%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] [trace_id=%(otelTraceID)s span_id=%(otelSpanID)s resource.service.name=%(otelServiceName)s] - %(message)s')
+  handler.setFormatter(formatter)
+  myLogger = logging.getLogger('MyLogger')
+  myLogger.addHandler(handler)
+  with tracer.start_as_current_span("A"):
+    myLogger.info('A')
+    with tracer.start_as_current_span("B"):
+      myLogger.info('B')
+      with tracer.start_as_current_span("C"):
+        myLogger.info('C')
+
 
   # Need to ensure all traces are sent
   trace.get_tracer_provider().shutdown()
